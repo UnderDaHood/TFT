@@ -26,8 +26,9 @@
 // **********************************************
 // dev/Foes/Foe Compiler/Program.cs
 // (c) 2021, 2022 Jeroen Petrus Broks
-// Version: 22.02.20
+// Version: 22.02.25
 // EndLic
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,6 +38,7 @@ using TrickyUnits;
 namespace Foe_Compiler {
 	class Program {
 
+		static GINIE Humanoid; 
 		const string _Source = "Scyndi:Projects/Applications/Apollo/Games/The Fairy Tale REVAMPED/dev/Foes";
 		const string _Target = "Scyndi:Projects/Applications/Apollo/Games/The Fairy Tale REVAMPED/src/Tricky Script/Script/Data/Foe/";
 		static string Source => Dirry.AD(_Source);
@@ -73,6 +75,27 @@ Init
 			QCol.QuickError(F);
 			Console.Beep();
 			Errors++;
+		}
+
+		static bool IsHumanoid(string F) {
+			while (Humanoid["Humanoid", F] == "") {
+				QCol.Yellow("Is foe ");
+				QCol.Magenta(F);
+				QCol.Yellow(" a humanoid? ");
+				var a = Console.ReadKey(true);
+				switch (a.Key) {
+					case ConsoleKey.J:
+					case ConsoleKey.Y:
+						QCol.Green("Yes\n");
+						Humanoid["Humanoid", F] = "YES";
+						break;
+					case ConsoleKey.N:
+						QCol.Red("No\n");
+						Humanoid["Humanoid", F] = "NO";
+						break;
+				}
+			}
+			return Humanoid["Humanoid", F].ToUpper()=="YES";
 		}
 
 		static void Compile(string F) {
@@ -155,6 +178,8 @@ Init
 					}
 				}
 					Output.Append("\tEnd\n\n");
+				// Humanoid
+				Output.Append($"\tRet.IsHumanoid = {IsHumanoid(F)}\n\n");
 				// Actions
 				Output.Append("\tRet.Actions = {}\n");
 				bool QOutBool(string f) { if (!OutBool.ContainsKey(f)) { QCol.Red("WARNING! "); QCol.Yellow($"No Outbool Key '{f}'\n"); return false; } else return OutBool[f]; }
@@ -191,6 +216,8 @@ Init
 			QCol.DoingTab = 15;
 			QCol.Doing("Analysing", _Source);
 			var Lijst = FileList.GetTree(Source);
+			Humanoid = GINIE.FromFile(Dirry.AD($"{_Source}/Humanoid.ini"));
+			Humanoid.AutoSaveSource = Dirry.AD($"{_Source}/Humanoid.ini");
 			foreach(var F in Lijst) {
 				if (!qstr.Prefixed(F.ToUpper(), "FOE COMPILER/")) Compile(F);
 			}

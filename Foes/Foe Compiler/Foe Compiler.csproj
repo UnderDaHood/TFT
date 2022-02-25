@@ -55,6 +55,9 @@
     <Compile Include="..\..\..\..\..\..\VisualStudio\TrickyUnits\GINI Is Not Ini.cs">
       <Link>Units\GINI Is Not Ini.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\..\..\VisualStudio\TrickyUnits\GINIE.cs">
+      <Link>Units\GINIE.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\..\..\..\VisualStudio\TrickyUnits\mkl.cs">
       <Link>Units\mkl.cs</Link>
     </Compile>
