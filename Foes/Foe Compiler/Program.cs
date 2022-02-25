@@ -25,8 +25,8 @@
 // 
 // **********************************************
 // dev/Foes/Foe Compiler/Program.cs
-// (c) 2021 Jeroen Petrus Broks
-// Version: 21.11.10
+// (c) 2021, 2022 Jeroen Petrus Broks
+// Version: 22.02.20
 // EndLic
 using System;
 using System.Collections.Generic;
@@ -50,11 +50,15 @@ Class Monster
 	ReadOnly String File
 	ReadOnly String Name
 	Get Var Data
-		_Data = Data || NeilUse('Script/Data/Foe/'..File)
+		_Data = _Data || NeilUse('Script/Data/Foe/'..File)(False)
 		Return _Data
 	End
 
-	Static Var Lijst = new TLinkedList
+	Get Int Killed
+		Return gv.vint['KILLED_'..File]
+	End
+
+	Static Var Lijst = new TLinkedList()
 	Constructor(String F, String N)
 		File = F
 		Name = N
@@ -137,6 +141,7 @@ Init
 					}
 				}
 				// Stats Normal
+				Output.Append($"\n\n\tRet.AllowOversoul = {AllowOversoul()}\n");
 				Output.Append("\n\n\tRet.Stats = {}\n");
 				Output.Append("\n\n\tIf !Oversoul\n");
 				foreach(var s in OutInt) {
