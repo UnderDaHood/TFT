@@ -26,7 +26,7 @@
 // **********************************************
 // dev/Foes/Foe Compiler/Program.cs
 // (c) 2021, 2022 Jeroen Petrus Broks
-// Version: 22.02.25
+// Version: 22.03.08
 // EndLic
 
 using System;
@@ -110,7 +110,7 @@ Init
 				var Output = new StringBuilder($"// Generated {DateTime.Now}\n// (c) Jeroen P. Broks\n// May NOT be extracted from this game without prior written permission from Jeroen P. Broks!\n\n\nTable _R(Bool Oversoul)\n\tTable Ret = {"{"}{"}"}\n"); Output.Append("\tRet.Drops = {}\n\tRet.Steal = {}\n\n");
 				var Drops = new Dictionary<string, int>();
 				var Rates = new SortedDictionary<string, int>();
-				bool AllowOversoul() => OutBool["OVERSOUL"];
+				bool AllowOversoul() => OutBool.ContainsKey("OVERSOUL") &&  OutBool["OVERSOUL"];
 				var DropCount = 0;
 				var StealCount = 0;
 				Bestiary.Append($"\tMonster.Lijst.AddLast(New Monster(\"{F}\",\"{Data["Name"]}\"))\n");
@@ -157,7 +157,7 @@ Init
 							if (k.Contains(" ")) Fout($"Invalid key {k}");
 							else {
 								OutString[k] = Data[k];
-								if (!qstr.Prefixed(k, "TARGET_")) Output.Append($"\tRet.{k} = \"{Data[k].Replace("\n", "\\n").Replace("\"","\\\"")}\"\n");
+								if (!qstr.Prefixed(k, "TARGET_")) Output.Append($"\tRet.{k} = \"{Data[k].Replace("\"","\\\"").Replace("\n", "\\n")}\"\n");
 							}
 							//Fout($"Unknown data group {key} (fk: {k})");
 							break;
@@ -207,6 +207,10 @@ Init
 			} catch(Exception E) {
 				Fout($".NET error thrown: \"{E.Message}\"");
 				QCol.Magenta($"{E.StackTrace}\n");
+#if DEBUG
+				TrickyDebug.AttachWait();
+#endif
+
 			}
 		}
 		
@@ -216,8 +220,8 @@ Init
 			QCol.DoingTab = 15;
 			QCol.Doing("Analysing", _Source);
 			var Lijst = FileList.GetTree(Source);
-			Humanoid = GINIE.FromFile(Dirry.AD($"{_Source}/Humanoid.ini"));
-			Humanoid.AutoSaveSource = Dirry.AD($"{_Source}/Humanoid.ini");
+			Humanoid = GINIE.FromFile(Dirry.AD($"{_Source}/.Humanoid.ini"));
+			Humanoid.AutoSaveSource = Dirry.AD($"{_Source}/.Humanoid.ini");
 			foreach(var F in Lijst) {
 				if (!qstr.Prefixed(F.ToUpper(), "FOE COMPILER/")) Compile(F);
 			}
