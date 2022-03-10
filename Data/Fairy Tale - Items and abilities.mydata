@@ -9155,7 +9155,7 @@ Rec: ABL_FOE_X_M_HEALSPRAY
 	SpellAni_Arg = 
 	SpellAni_External = FALSE
 	Stance = Cast
-	Target = 1F
+	Target = 1A
 	Title = Healing Spray
 	Type = Item
 	USE_Penalty = 0
