@@ -26,7 +26,7 @@
 // **********************************************
 // dev/Foes/Foe Compiler/Program.cs
 // (c) 2021, 2022 Jeroen Petrus Broks
-// Version: 22.03.08
+// Version: 22.07.01
 // EndLic
 
 using System;
@@ -123,6 +123,7 @@ Init
 							OutBool[key] = qstr.ToInt(Data[k]) > 0;
 							if (key == "OVERSOUL" && (!AllowOversoul())) Output.Append($"\tIf Oversoul\n\t\tLua.error(\"Enemy '{F}' does not support oversoul!\")\n\tEnd\n\n");
 							if (key == "BOSS") Output.Append($"\tRet.Boss = {OutBool[key].ToString().ToLower()}\n");
+							if (key.Trim() == "STSTART_UNDEAD") Output.Append($"\tRet.Undead = {OutBool[key]}\n");
 							break;
 						case "NUM":
 							OutInt[key] = qstr.ToInt(Data[k]);
